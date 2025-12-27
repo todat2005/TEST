@@ -139,7 +139,7 @@ function Register() {
     <>
       <LoadingSpinner isLoading={isLoading} message="Creating account..." />
 
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-4 sm:px-6 sm:py-20 lg:px-8 lg:py-20">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-20 px-4 sm:px-6 sm:py-20 lg:px-8 lg:py-20">
         <div className={`max-w-6xl w-full ${isLoading ? "opacity-60" : ""}`}>
           <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sm:p-6 md:p-8">
             <div className="text-center mb-6 md:mb-8">
