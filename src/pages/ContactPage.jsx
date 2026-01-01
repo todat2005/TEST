@@ -4,36 +4,125 @@ import Navbar from "../components/NavBar.jsx";
 import Footer from "../components/Footer.jsx";
 
 function Contact() {
+  // Lấy ngôn ngữ từ localStorage
+  const language = localStorage.getItem("language") || "en";
+
+  // Dữ liệu đa ngôn ngữ
+  const translations = {
+    en: {
+      title: "Contact Information",
+      subtitle:
+        "Reach out to us through any of these contact methods. We're always ready to help!",
+
+      phoneSupport: "Phone Support",
+      emailContact: "Email Contact",
+      officeLocation: "Office Location",
+
+      hotline: "Hotline",
+      support: "Support",
+      sales: "Sales",
+      general: "General",
+      technical: "Technical",
+      headquarters: "Headquarters",
+      city: "City",
+      country: "Country",
+
+      hours: "Mon-Fri: 8AM-6PM, Sat: 9AM-4PM",
+      response: "Response within 24 hours",
+      openHours: "Open 8:00 AM - 6:00 PM",
+
+      quickActions: "Quick Contact Actions",
+      quickSubtitle: "Choose the most convenient way to get in touch with us",
+
+      callNow: "Call Now",
+      immediateAssistance: "Immediate assistance",
+
+      emailUs: "Email Us",
+      emailSupport: "24/7 email support",
+
+      visitOffice: "Visit Office",
+      getDirections: "Get directions",
+
+      supportCenter: "Support Center",
+      faqHelp: "FAQ & Help",
+      findAnswers: "Find answers",
+
+      backHome: "Back to Homepage",
+    },
+    vi: {
+      title: "Thông Tin Liên Hệ",
+      subtitle:
+        "Liên hệ với chúng tôi qua các phương thức liên lạc này. Chúng tôi luôn sẵn sàng hỗ trợ!",
+
+      phoneSupport: "Hỗ Trợ Điện Thoại",
+      emailContact: "Liên Hệ Email",
+      officeLocation: "Địa Chỉ Văn Phòng",
+
+      hotline: "Đường dây nóng",
+      support: "Hỗ trợ",
+      sales: "Kinh doanh",
+      general: "Chung",
+      technical: "Kỹ thuật",
+      headquarters: "Trụ sở chính",
+      city: "Thành phố",
+      country: "Quốc gia",
+
+      hours: "Thứ 2 - Thứ 6: 8AM-6PM, Thứ 7: 9AM-4PM",
+      response: "Phản hồi trong vòng 24 giờ",
+      openHours: "Mở cửa 8:00 AM - 6:00 PM",
+
+      quickActions: "Hành Động Liên Hệ Nhanh",
+      quickSubtitle: "Chọn cách thuận tiện nhất để liên hệ với chúng tôi",
+
+      callNow: "Gọi Ngay",
+      immediateAssistance: "Hỗ trợ ngay lập tức",
+
+      emailUs: "Gửi Email",
+      emailSupport: "Hỗ trợ email 24/7",
+
+      visitOffice: "Thăm Văn Phòng",
+      getDirections: "Xem chỉ đường",
+
+      supportCenter: "Trung Tâm Hỗ Trợ",
+      faqHelp: "Câu hỏi thường gặp & Trợ giúp",
+      findAnswers: "Tìm câu trả lời",
+
+      backHome: "Quay về trang chủ",
+    },
+  };
+
+  const t = translations[language];
+
   const contactMethods = [
     {
-      title: "Phone Support",
+      title: t.phoneSupport,
       icon: "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z",
       contacts: [
-        { label: "Hotline", number: "+84 123 456 789" },
-        { label: "Support", number: "+84 987 654 321" },
-        { label: "Sales", number: "+84 555 123 456" },
+        { label: t.hotline, number: "+84 123 456 789" },
+        { label: t.support, number: "+84 987 654 321" },
+        { label: t.sales, number: "+84 555 123 456" },
       ],
-      hours: "Mon-Fri: 8AM-6PM, Sat: 9AM-4PM",
+      hours: t.hours,
     },
     {
-      title: "Email Contact",
+      title: t.emailContact,
       icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
       contacts: [
-        { label: "General", email: "info@ticketsystem.com" },
-        { label: "Support", email: "support@ticketsystem.com" },
-        { label: "Technical", email: "tech@ticketsystem.com" },
+        { label: t.general, email: "info@ticketsystem.com" },
+        { label: t.support, email: "support@ticketsystem.com" },
+        { label: t.technical, email: "tech@ticketsystem.com" },
       ],
-      response: "Response within 24 hours",
+      response: t.response,
     },
     {
-      title: "Office Location",
+      title: t.officeLocation,
       icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z",
       contacts: [
-        { label: "Headquarters", address: "123 Business St, District 1" },
-        { label: "City", address: "Ho Chi Minh City" },
-        { label: "Country", address: "Vietnam 700000" },
+        { label: t.headquarters, address: "123 Business St, District 1" },
+        { label: t.city, address: "Ho Chi Minh City" },
+        { label: t.country, address: "Vietnam 700000" },
       ],
-      hours: "Open 8:00 AM - 6:00 PM",
+      hours: t.openHours,
     },
   ];
 
@@ -46,11 +135,10 @@ function Contact() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Contact Information
+              {t.title}
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Reach out to us through any of these contact methods. We're always
-              ready to help!
+              {t.subtitle}
             </p>
           </div>
 
@@ -111,11 +199,9 @@ function Contact() {
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-3">
-                Quick Contact Actions
+                {t.quickActions}
               </h2>
-              <p className="text-gray-600">
-                Choose the most convenient way to get in touch with us
-              </p>
+              <p className="text-gray-600">{t.quickSubtitle}</p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -138,10 +224,12 @@ function Contact() {
                     />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">Call Now</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  {t.callNow}
+                </h3>
                 <p className="text-blue-600 font-medium">+84 123 456 789</p>
                 <p className="text-sm text-gray-500 mt-2">
-                  Immediate assistance
+                  {t.immediateAssistance}
                 </p>
               </a>
 
@@ -164,11 +252,13 @@ function Contact() {
                     />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">Email Us</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  {t.emailUs}
+                </h3>
                 <p className="text-green-600 font-medium">
                   support@company.com
                 </p>
-                <p className="text-sm text-gray-500 mt-2">24/7 email support</p>
+                <p className="text-sm text-gray-500 mt-2">{t.emailSupport}</p>
               </a>
 
               <a
@@ -199,10 +289,10 @@ function Contact() {
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-800 mb-2">
-                  Visit Office
+                  {t.visitOffice}
                 </h3>
                 <p className="text-purple-600 font-medium">123 Business St</p>
-                <p className="text-sm text-gray-500 mt-2">Get directions</p>
+                <p className="text-sm text-gray-500 mt-2">{t.getDirections}</p>
               </a>
 
               <Link
@@ -225,10 +315,10 @@ function Contact() {
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-800 mb-2">
-                  Support Center
+                  {t.supportCenter}
                 </h3>
-                <p className="text-orange-600 font-medium">FAQ & Help</p>
-                <p className="text-sm text-gray-500 mt-2">Find answers</p>
+                <p className="text-orange-600 font-medium">{t.faqHelp}</p>
+                <p className="text-sm text-gray-500 mt-2">{t.findAnswers}</p>
               </Link>
             </div>
           </div>
@@ -252,7 +342,7 @@ function Contact() {
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
-              Back to Homepage
+              {t.backHome}
             </Link>
           </div>
         </div>

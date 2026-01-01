@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
 function Register() {
   const navigate = useNavigate();
+  const [language, setLanguage] = useState("vi");
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,6 +20,120 @@ function Register() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Khởi tạo ngôn ngữ từ localStorage
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
+
+  // Theo dõi thay đổi ngôn ngữ
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedLanguage = localStorage.getItem("language");
+      if (savedLanguage && savedLanguage !== language) {
+        setLanguage(savedLanguage);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [language]);
+
+  const translations = {
+    vi: {
+      title: "Tạo tài khoản",
+      subtitle: "Điền thông tin của bạn để tạo tài khoản",
+      personalInfo: "Thông tin cá nhân",
+      accountDetails: "Thông tin tài khoản",
+      fullNameLabel: "Họ và tên *",
+      fullNamePlaceholder: "Nguyễn Văn A",
+      fullNameHint: "Nhập họ và tên của bạn",
+      emailLabel: "Email *",
+      emailPlaceholder: "email@example.com",
+      phoneLabel: "Số điện thoại",
+      phonePlaceholder: "+84 123 456 789",
+      birthdateLabel: "Ngày sinh *",
+      birthdateHint: "Phải là ngày trong quá khứ",
+      genderLabel: "Giới tính *",
+      genderPlaceholder: "--Chọn giới tính--",
+      male: "Nam",
+      female: "Nữ",
+      other: "Khác",
+      passwordLabel: "Mật khẩu *",
+      passwordPlaceholder: "••••••••",
+      passwordHint: "Ít nhất 8 ký tự bao gồm chữ và số",
+      confirmPasswordLabel: "Xác nhận mật khẩu *",
+      confirmPasswordPlaceholder: "••••••••",
+      confirmPasswordHint: "Nhập lại mật khẩu của bạn",
+      terms: "Tôi đồng ý với ",
+      termsLink: "Điều khoản và Điều kiện",
+      and: " và ",
+      privacyLink: "Chính sách Bảo mật",
+      createAccount: "Tạo tài khoản",
+      creatingAccount: "Đang tạo tài khoản...",
+      haveAccount: "Đã có tài khoản?",
+      signInHere: "Đăng nhập tại đây",
+      errorMessages: {
+        termsRequired: "Bạn phải đồng ý với Điều khoản và Điều kiện.",
+        passwordMismatch: "Mật khẩu không khớp.",
+        invalidBirthdate: "Ngày sinh không hợp lệ.",
+        invalidGender: "Vui lòng chọn giới tính hợp lệ.",
+        passwordLength: "Mật khẩu phải có ít nhất 8 ký tự.",
+        registrationFailed: "Đăng ký thất bại",
+        serverError: "Lỗi máy chủ",
+      },
+      successMessage: "Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.",
+    },
+    en: {
+      title: "Create Account",
+      subtitle: "Fill in your details to create an account",
+      personalInfo: "Personal Information",
+      accountDetails: "Account Details",
+      fullNameLabel: "Your Full Name *",
+      fullNamePlaceholder: "John Doe",
+      fullNameHint: "Enter your first and last name",
+      emailLabel: "Email *",
+      emailPlaceholder: "your@email.com",
+      phoneLabel: "Phone Number",
+      phonePlaceholder: "+1 234 567 890",
+      birthdateLabel: "Birthdate *",
+      birthdateHint: "Must be a past date",
+      genderLabel: "Gender *",
+      genderPlaceholder: "--Select gender--",
+      male: "Male",
+      female: "Female",
+      other: "Other",
+      passwordLabel: "Password *",
+      passwordPlaceholder: "••••••••",
+      passwordHint: "At least 8 characters with letters and numbers",
+      confirmPasswordLabel: "Confirm Password *",
+      confirmPasswordPlaceholder: "••••••••",
+      confirmPasswordHint: "Re-enter your password",
+      terms: "I accept the ",
+      termsLink: "Terms and Conditions",
+      and: " and acknowledge the ",
+      privacyLink: "Privacy Policy",
+      createAccount: "Create Account",
+      creatingAccount: "Creating Account...",
+      haveAccount: "Already have an account?",
+      signInHere: "Sign in here",
+      errorMessages: {
+        termsRequired: "You must accept the Terms and Conditions.",
+        passwordMismatch: "Passwords do not match.",
+        invalidBirthdate: "Invalid birthdate.",
+        invalidGender: "Please select a valid gender.",
+        passwordLength: "Password must be at least 8 characters long.",
+        registrationFailed: "Registration failed",
+        serverError: "Server error",
+      },
+      successMessage: "Account created successfully! You can now login.",
+    },
+  };
+
+  const t = translations[language];
 
   const checkConfirmPassword = () => {
     return formData.password === formData.confirmPassword;
@@ -60,31 +175,31 @@ function Register() {
       setIsSuccess(false);
 
       if (!acceptedTerms) {
-        setErrorMessage("You must accept the Terms and Conditions.");
+        setErrorMessage(t.errorMessages.termsRequired);
         setIsLoading(false);
         return;
       }
 
       if (!checkConfirmPassword()) {
-        setErrorMessage("Passwords do not match.");
+        setErrorMessage(t.errorMessages.passwordMismatch);
         setIsLoading(false);
         return;
       }
 
       if (!checkBirthdate()) {
-        setErrorMessage("Invalid birthdate.");
+        setErrorMessage(t.errorMessages.invalidBirthdate);
         setIsLoading(false);
         return;
       }
 
       if (!checkGender()) {
-        setErrorMessage("Please select a valid gender.");
+        setErrorMessage(t.errorMessages.invalidGender);
         setIsLoading(false);
         return;
       }
 
       if (!checkLengthPassword()) {
-        setErrorMessage("Password must be at least 8 characters long.");
+        setErrorMessage(t.errorMessages.passwordLength);
         setIsLoading(false);
         return;
       }
@@ -104,7 +219,9 @@ function Register() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || "Registration failed");
+        setErrorMessage(
+          errorData.message || t.errorMessages.registrationFailed
+        );
         setIsLoading(false);
         return;
       }
@@ -137,7 +254,7 @@ function Register() {
 
   return (
     <>
-      <LoadingSpinner isLoading={isLoading} message="Creating account..." />
+      <LoadingSpinner isLoading={isLoading} message={t.creatingAccount} />
 
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-20 px-4 sm:px-6 sm:py-20 lg:px-8 lg:py-20">
         <div className={`max-w-6xl w-full ${isLoading ? "opacity-60" : ""}`}>
@@ -149,10 +266,10 @@ function Register() {
                 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 inline-block mb-3 md:mb-4"
               />
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
-                Create Account
+                {t.title}
               </h1>
               <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
-                Fill in your details to create an account
+                {t.subtitle}
               </p>
             </div>
 
@@ -164,7 +281,7 @@ function Register() {
 
             {isSuccess && (
               <div className="mb-4 sm:mb-6 p-3 bg-green-50 border border-green-100 rounded-lg text-green-700 text-sm text-center">
-                Account created successfully! You can now login.
+                {t.successMessage}
               </div>
             )}
 
@@ -173,12 +290,12 @@ function Register() {
                 {/* Left Column - Personal Information */}
                 <div className="space-y-4 md:space-y-6">
                   <h2 className="text-base sm:text-lg font-medium text-gray-700 border-b pb-2">
-                    Personal Information
+                    {t.personalInfo}
                   </h2>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Your Full Name *
+                      {t.fullNameLabel}
                     </label>
                     <input
                       value={formData.fullname}
@@ -188,17 +305,17 @@ function Register() {
                       type="text"
                       disabled={isLoading}
                       className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-                      placeholder="Nguyen Van A"
+                      placeholder={t.fullNamePlaceholder}
                       required
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Enter your first and last name
+                      {t.fullNameHint}
                     </p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Email *
+                      {t.emailLabel}
                     </label>
                     <input
                       value={formData.email}
@@ -208,14 +325,14 @@ function Register() {
                       type="email"
                       disabled={isLoading}
                       className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-                      placeholder="your@email.com"
+                      placeholder={t.emailPlaceholder}
                       required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Phone Number
+                      {t.phoneLabel}
                     </label>
                     <input
                       value={formData.phonenumber}
@@ -228,13 +345,13 @@ function Register() {
                       type="tel"
                       disabled={isLoading}
                       className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-                      placeholder="+84 123 456 789"
+                      placeholder={t.phonePlaceholder}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Birthdate *
+                      {t.birthdateLabel}
                     </label>
                     <input
                       value={formData.birthdate}
@@ -247,7 +364,7 @@ function Register() {
                       required
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Must be a past date
+                      {t.birthdateHint}
                     </p>
                   </div>
                 </div>
@@ -255,12 +372,12 @@ function Register() {
                 {/* Right Column - Account Details */}
                 <div className="space-y-4 md:space-y-6">
                   <h2 className="text-base sm:text-lg font-medium text-gray-700 border-b pb-2">
-                    Account Details
+                    {t.accountDetails}
                   </h2>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Gender *
+                      {t.genderLabel}
                     </label>
                     <select
                       value={formData.gender}
@@ -271,16 +388,16 @@ function Register() {
                       className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
                       required
                     >
-                      <option value="">--Select gender--</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
+                      <option value="">{t.genderPlaceholder}</option>
+                      <option value="male">{t.male}</option>
+                      <option value="female">{t.female}</option>
+                      <option value="other">{t.other}</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Password *
+                      {t.passwordLabel}
                     </label>
                     <div className="relative">
                       <input
@@ -294,7 +411,7 @@ function Register() {
                         type={showPassword ? "text" : "password"}
                         disabled={isLoading}
                         className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed pr-10 sm:pr-12"
-                        placeholder="••••••••"
+                        placeholder={t.passwordPlaceholder}
                         required
                       />
                       <button
@@ -303,7 +420,13 @@ function Register() {
                         disabled={isLoading}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
                         aria-label={
-                          showPassword ? "Hide password" : "Show password"
+                          showPassword
+                            ? language === "vi"
+                              ? "Ẩn mật khẩu"
+                              : "Hide password"
+                            : language === "vi"
+                            ? "Hiện mật khẩu"
+                            : "Show password"
                         }
                       >
                         {showPassword ? (
@@ -344,13 +467,13 @@ function Register() {
                       </button>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      At least 8 characters with letters and numbers
+                      {t.passwordHint}
                     </p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Confirm Password *
+                      {t.confirmPasswordLabel}
                     </label>
                     <div className="relative">
                       <input
@@ -364,7 +487,7 @@ function Register() {
                         type={showConfirmPassword ? "text" : "password"}
                         disabled={isLoading}
                         className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed pr-10 sm:pr-12"
-                        placeholder="••••••••"
+                        placeholder={t.confirmPasswordPlaceholder}
                         required
                       />
                       <button
@@ -374,7 +497,11 @@ function Register() {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
                         aria-label={
                           showConfirmPassword
-                            ? "Hide password"
+                            ? language === "vi"
+                              ? "Ẩn mật khẩu"
+                              : "Hide password"
+                            : language === "vi"
+                            ? "Hiện mật khẩu"
                             : "Show password"
                         }
                       >
@@ -416,7 +543,7 @@ function Register() {
                       </button>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      Re-enter your password
+                      {t.confirmPasswordHint}
                     </p>
                   </div>
 
@@ -436,13 +563,13 @@ function Register() {
                         htmlFor="terms"
                         className="ml-3 text-sm text-gray-600"
                       >
-                        I accept the{" "}
+                        {t.terms}
                         <span className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer">
-                          Terms and Conditions
-                        </span>{" "}
-                        and acknowledge the{" "}
+                          {t.termsLink}
+                        </span>
+                        {t.and}
                         <span className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer">
-                          Privacy Policy
+                          {t.privacyLink}
                         </span>
                         . *
                       </label>
@@ -478,10 +605,10 @@ function Register() {
                               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                             ></path>
                           </svg>
-                          Creating Account...
+                          {t.creatingAccount}
                         </span>
                       ) : (
-                        "Create Account"
+                        t.createAccount
                       )}
                     </button>
                   </div>
@@ -489,12 +616,12 @@ function Register() {
                   {/* Login Link */}
                   <div className="lg:col-span-2 text-center pt-4">
                     <p className="text-sm text-gray-600">
-                      Already have an account?{" "}
+                      {t.haveAccount}{" "}
                       <Link
                         to="/login"
                         className="font-medium text-blue-600 hover:text-blue-500"
                       >
-                        Sign in here
+                        {t.signInHere}
                       </Link>
                     </p>
                   </div>

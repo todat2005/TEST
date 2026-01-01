@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
 function Login() {
   const navigate = useNavigate();
+  const [language, setLanguage] = useState("vi");
 
   const [username, setUsername] = useState(
     () => localStorage.getItem("username") || ""
@@ -13,6 +14,68 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRememberMe, setIsRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Khởi tạo ngôn ngữ từ localStorage
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
+
+  // Theo dõi thay đổi ngôn ngữ
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedLanguage = localStorage.getItem("language");
+      if (savedLanguage && savedLanguage !== language) {
+        setLanguage(savedLanguage);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [language]);
+
+  const translations = {
+    vi: {
+      title: "Đăng nhập vào tài khoản của bạn",
+      subtitle: "Chào mừng trở lại! Vui lòng nhập thông tin của bạn",
+      usernameLabel: "Số điện thoại hoặc Email",
+      usernamePlaceholder: "Nhập số điện thoại hoặc email của bạn",
+      passwordLabel: "Mật khẩu",
+      passwordPlaceholder: "Nhập mật khẩu của bạn",
+      rememberMe: "Ghi nhớ đăng nhập",
+      forgotPassword: "Quên mật khẩu?",
+      signIn: "Đăng nhập",
+      signingIn: "Đang đăng nhập...",
+      noAccount: "Chưa có tài khoản?",
+      signUpNow: "Đăng ký ngay",
+      errorMessages: {
+        loginFailed: "Đăng nhập thất bại",
+        serverError: "Lỗi máy chủ",
+      },
+    },
+    en: {
+      title: "Sign in to your account",
+      subtitle: "Welcome back! Please enter your details",
+      usernameLabel: "Phone Number or Email",
+      usernamePlaceholder: "Enter your phone or email",
+      passwordLabel: "Password",
+      passwordPlaceholder: "Enter your password",
+      rememberMe: "Remember me",
+      forgotPassword: "Forgot password?",
+      signIn: "Sign in",
+      signingIn: "Signing in...",
+      noAccount: "Don't have an account?",
+      signUpNow: "Sign up now",
+      errorMessages: {
+        loginFailed: "Login failed",
+        serverError: "Server error",
+      },
+    },
+  };
+
+  const t = translations[language];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +92,7 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.message || "Login failed");
+        setMessage(data.message || t.errorMessages.loginFailed);
         return;
       }
 
@@ -54,7 +117,7 @@ function Login() {
 
   return (
     <>
-      <LoadingSpinner isLoading={isLoading} message="Signing in..." />
+      <LoadingSpinner isLoading={isLoading} message={t.signingIn} />
 
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-4 sm:px-6 sm:py-20 lg:px-8 lg:py-20">
         <div className={`max-w-md w-full ${isLoading ? "opacity-60" : ""}`}>
@@ -66,11 +129,9 @@ function Login() {
                 className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4"
               />
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
-                Sign in to your account
+                {t.title}
               </h1>
-              <p className="mt-1 sm:mt-2 text-sm text-gray-600">
-                Welcome back! Please enter your details
-              </p>
+              <p className="mt-1 sm:mt-2 text-sm text-gray-600">{t.subtitle}</p>
             </div>
 
             {message && (
@@ -85,7 +146,7 @@ function Login() {
                   htmlFor="username"
                   className="block text-sm font-medium text-gray-700 mb-1.5"
                 >
-                  Phone Number or Email
+                  {t.usernameLabel}
                 </label>
                 <input
                   id="username"
@@ -95,7 +156,7 @@ function Login() {
                   required
                   disabled={isLoading}
                   className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed transition-colors"
-                  placeholder="Enter your phone or email"
+                  placeholder={t.usernamePlaceholder}
                 />
               </div>
 
@@ -104,7 +165,7 @@ function Login() {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 mb-1.5"
                 >
-                  Password
+                  {t.passwordLabel}
                 </label>
                 <div className="relative">
                   <input
@@ -115,7 +176,7 @@ function Login() {
                     required
                     disabled={isLoading}
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed pr-10 sm:pr-12 transition-colors"
-                    placeholder="Enter your password"
+                    placeholder={t.passwordPlaceholder}
                   />
                   <button
                     type="button"
@@ -123,7 +184,13 @@ function Login() {
                     disabled={isLoading}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
                     aria-label={
-                      showPassword ? "Hide password" : "Show password"
+                      showPassword
+                        ? language === "vi"
+                          ? "Ẩn mật khẩu"
+                          : "Hide password"
+                        : language === "vi"
+                        ? "Hiện mật khẩu"
+                        : "Show password"
                     }
                   >
                     {showPassword ? (
@@ -179,7 +246,7 @@ function Login() {
                     htmlFor="remember-me"
                     className="ml-2 text-sm text-gray-600"
                   >
-                    Remember me
+                    {t.rememberMe}
                   </label>
                 </div>
 
@@ -191,7 +258,7 @@ function Login() {
                       : "text-blue-600 hover:text-blue-500"
                   } transition-colors`}
                 >
-                  Forgot password?
+                  {t.forgotPassword}
                 </Link>
               </div>
 
@@ -222,16 +289,16 @@ function Login() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    Signing in...
+                    {t.signingIn}
                   </span>
                 ) : (
-                  "Sign in"
+                  t.signIn
                 )}
               </button>
 
               <div className="text-center pt-4">
                 <p className="text-sm text-gray-600">
-                  Don't have an account?{" "}
+                  {t.noAccount}{" "}
                   <Link
                     to="/register"
                     className={`font-medium ${
@@ -240,7 +307,7 @@ function Login() {
                         : "text-blue-600 hover:text-blue-500"
                     } transition-colors`}
                   >
-                    Sign up now
+                    {t.signUpNow}
                   </Link>
                 </p>
               </div>
