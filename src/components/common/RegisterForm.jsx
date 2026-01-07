@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner.jsx";
-
+import { API_URL } from "../../config/config.js";
+import translations from "../../translations/RegisterForm.js";
 function Register() {
   const navigate = useNavigate();
   const [language, setLanguage] = useState("vi");
@@ -42,98 +43,7 @@ function Register() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [language]);
 
-  const translations = {
-    vi: {
-      title: "Tạo tài khoản",
-      subtitle: "Điền thông tin của bạn để tạo tài khoản",
-      personalInfo: "Thông tin cá nhân",
-      accountDetails: "Thông tin tài khoản",
-      fullNameLabel: "Họ và tên *",
-      fullNamePlaceholder: "Nguyễn Văn A",
-      fullNameHint: "Nhập họ và tên của bạn",
-      emailLabel: "Email *",
-      emailPlaceholder: "email@example.com",
-      phoneLabel: "Số điện thoại",
-      phonePlaceholder: "+84 123 456 789",
-      birthdateLabel: "Ngày sinh *",
-      birthdateHint: "Phải là ngày trong quá khứ",
-      genderLabel: "Giới tính *",
-      genderPlaceholder: "--Chọn giới tính--",
-      male: "Nam",
-      female: "Nữ",
-      other: "Khác",
-      passwordLabel: "Mật khẩu *",
-      passwordPlaceholder: "••••••••",
-      passwordHint: "Ít nhất 8 ký tự bao gồm chữ và số",
-      confirmPasswordLabel: "Xác nhận mật khẩu *",
-      confirmPasswordPlaceholder: "••••••••",
-      confirmPasswordHint: "Nhập lại mật khẩu của bạn",
-      terms: "Tôi đồng ý với ",
-      termsLink: "Điều khoản và Điều kiện",
-      and: " và ",
-      privacyLink: "Chính sách Bảo mật",
-      createAccount: "Tạo tài khoản",
-      creatingAccount: "Đang tạo tài khoản...",
-      haveAccount: "Đã có tài khoản?",
-      signInHere: "Đăng nhập tại đây",
-      errorMessages: {
-        termsRequired: "Bạn phải đồng ý với Điều khoản và Điều kiện.",
-        passwordMismatch: "Mật khẩu không khớp.",
-        invalidBirthdate: "Ngày sinh không hợp lệ.",
-        invalidGender: "Vui lòng chọn giới tính hợp lệ.",
-        passwordLength: "Mật khẩu phải có ít nhất 8 ký tự.",
-        registrationFailed: "Đăng ký thất bại",
-        serverError: "Lỗi máy chủ",
-      },
-      successMessage: "Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.",
-    },
-    en: {
-      title: "Create Account",
-      subtitle: "Fill in your details to create an account",
-      personalInfo: "Personal Information",
-      accountDetails: "Account Details",
-      fullNameLabel: "Your Full Name *",
-      fullNamePlaceholder: "John Doe",
-      fullNameHint: "Enter your first and last name",
-      emailLabel: "Email *",
-      emailPlaceholder: "your@email.com",
-      phoneLabel: "Phone Number",
-      phonePlaceholder: "+1 234 567 890",
-      birthdateLabel: "Birthdate *",
-      birthdateHint: "Must be a past date",
-      genderLabel: "Gender *",
-      genderPlaceholder: "--Select gender--",
-      male: "Male",
-      female: "Female",
-      other: "Other",
-      passwordLabel: "Password *",
-      passwordPlaceholder: "••••••••",
-      passwordHint: "At least 8 characters with letters and numbers",
-      confirmPasswordLabel: "Confirm Password *",
-      confirmPasswordPlaceholder: "••••••••",
-      confirmPasswordHint: "Re-enter your password",
-      terms: "I accept the ",
-      termsLink: "Terms and Conditions",
-      and: " and acknowledge the ",
-      privacyLink: "Privacy Policy",
-      createAccount: "Create Account",
-      creatingAccount: "Creating Account...",
-      haveAccount: "Already have an account?",
-      signInHere: "Sign in here",
-      errorMessages: {
-        termsRequired: "You must accept the Terms and Conditions.",
-        passwordMismatch: "Passwords do not match.",
-        invalidBirthdate: "Invalid birthdate.",
-        invalidGender: "Please select a valid gender.",
-        passwordLength: "Password must be at least 8 characters long.",
-        registrationFailed: "Registration failed",
-        serverError: "Server error",
-      },
-      successMessage: "Account created successfully! You can now login.",
-    },
-  };
-
-  const t = translations[language];
+  const t = language === "vi" ? translations.vi : translations.en;
 
   const checkConfirmPassword = () => {
     return formData.password === formData.confirmPassword;
@@ -204,7 +114,7 @@ function Register() {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/register", {
+      const response = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

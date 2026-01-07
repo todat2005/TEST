@@ -1,97 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/NavBar";
-import Footer from "../components/Footer";
-import LoadingSpinner from "../components/LoadingSpinner";
-
+import Navbar from "../components/common/NavBar";
+import Footer from "../components/common/Footer";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import translationsTheaterPage from "../translations/TheaterPage.js";
+import { API_URL } from "../config/config.js";
 function TheatersPage() {
   const [theaters, setTheaters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCity, setSelectedCity] = useState("all");
   const [isMobile, setIsMobile] = useState(false);
   const [expandedTheater, setExpandedTheater] = useState(null);
+  const [error, setError] = useState(null);
 
   // Lấy ngôn ngữ từ localStorage
-  const language = localStorage.getItem("language") || "en";
+  const language = localStorage.getItem("language") || "vi";
 
   // Dữ liệu đa ngôn ngữ
-  const translations = {
-    en: {
-      title: "Our Theaters",
-      subtitle: "Find the perfect cinema experience near you",
-      filterByCity: "Filter by City",
-      allCities: "All Cities",
-      viewShowtimes: "View Showtimes",
-      contact: "Contact",
-      hours: "Hours",
-      loading: "Loading theaters...",
-      noTheaters: "No theaters found",
-      selectCity: "Select a city",
-      findTheater: "Find a Theater",
-      location: "Location",
-      screens: "Screens",
-      capacity: "Capacity",
-      seats: "seats",
-      openingHours: "Opening Hours",
-      mondayToFriday: "Mon - Fri",
-      saturday: "Saturday",
-      sunday: "Sunday",
-      holiday: "Holiday",
-      directions: "Directions",
-      phone: "Phone",
-      email: "Email",
-      bookNow: "Book Now",
-      clearFilters: "Clear filters",
-      theatersFound: "theaters found",
-      address: "Address",
-      city: "City",
-      viewDetails: "View Details",
-      hideDetails: "Hide Details",
-      callNow: "Call Now",
-      emailUs: "Email Us",
-      theaterInfo: "Theater Information",
-      quickActions: "Quick Actions",
-    },
-    vi: {
-      title: "Hệ Thống Rạp",
-      subtitle: "Tìm trải nghiệm điện ảnh hoàn hảo gần bạn",
-      filterByCity: "Lọc theo thành phố",
-      allCities: "Tất cả thành phố",
-      viewShowtimes: "Xem lịch chiếu",
-      contact: "Liên hệ",
-      hours: "Giờ mở cửa",
-      loading: "Đang tải rạp...",
-      noTheaters: "Không tìm thấy rạp",
-      selectCity: "Chọn thành phố",
-      findTheater: "Tìm rạp",
-      location: "Địa điểm",
-      screens: "Phòng chiếu",
-      capacity: "Sức chứa",
-      seats: "ghế",
-      openingHours: "Giờ mở cửa",
-      mondayToFriday: "Thứ 2 - Thứ 6",
-      saturday: "Thứ 7",
-      sunday: "Chủ nhật",
-      holiday: "Ngày lễ",
-      directions: "Chỉ đường",
-      phone: "Điện thoại",
-      email: "Email",
-      bookNow: "Đặt vé ngay",
-      clearFilters: "Xóa bộ lọc",
-      theatersFound: "rạp được tìm thấy",
-      address: "Địa chỉ",
-      city: "Thành phố",
-      viewDetails: "Xem chi tiết",
-      hideDetails: "Ẩn chi tiết",
-      callNow: "Gọi ngay",
-      emailUs: "Gửi email",
-      theaterInfo: "Thông tin rạp",
-      quickActions: "Thao tác nhanh",
-    },
-  };
-
-  const t = translations[language];
-
+  const t =
+    language === "vi" ? translationsTheaterPage.vi : translationsTheaterPage.en;
   const vietnamCities = [
     {
       value: "all",
@@ -117,151 +44,68 @@ function TheatersPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Giả lập API call
+  // Gọi API thật
   useEffect(() => {
-    const fetchTheaters = async () => {
-      setLoading(true);
-      try {
-        const mockTheaters = [
-          {
-            id: 1,
-            name: "Cinema City Center",
-            city: "Hanoi",
-            address: "123 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội",
-            description:
-              language === "vi"
-                ? "Rạp chiếu phim cao cấp tại trung tâm thành phố với 12 phòng chiếu hiện đại"
-                : "Premium cinema in city center with 12 modern screening rooms",
-            screens: 12,
-            capacity: 1500,
-            openingHours: {
-              weekday: "8:00 - 23:00",
-              saturday: "8:00 - 00:00",
-              sunday: "8:00 - 23:00",
-              holiday: "8:00 - 00:00",
-            },
-            phone: "024 1234 5678",
-            email: "hanoi@cinema.com",
-            coordinates: { lat: 21.0285, lng: 105.8542 },
-          },
-          {
-            id: 2,
-            name: "Royal Cinema District 1",
-            city: "Ho Chi Minh City",
-            address: "456 Lê Lợi, Quận 1, TP.HCM",
-            description:
-              language === "vi"
-                ? "Rạp chiếu phim sang trọng với công nghệ IMAX và 4DX tiên tiến"
-                : "Luxury cinema with advanced IMAX and 4DX technology",
-            screens: 10,
-            capacity: 1200,
-            openingHours: {
-              weekday: "9:00 - 00:00",
-              saturday: "9:00 - 01:00",
-              sunday: "9:00 - 00:00",
-              holiday: "9:00 - 01:00",
-            },
-            phone: "028 9876 5432",
-            email: "hcm@cinema.com",
-            coordinates: { lat: 10.7769, lng: 106.7009 },
-          },
-          {
-            id: 3,
-            name: "Ocean View Cinema",
-            city: "Da Nang",
-            address: "789 Bạch Đằng, Hải Châu, Đà Nẵng",
-            description:
-              language === "vi"
-                ? "Rạp chiếu phim view biển với ghế nằm thoải mái và âm thanh Dolby Atmos"
-                : "Ocean view cinema with comfortable recliner seats and Dolby Atmos sound",
-            screens: 8,
-            capacity: 800,
-            openingHours: {
-              weekday: "10:00 - 23:00",
-              saturday: "10:00 - 00:00",
-              sunday: "10:00 - 23:00",
-              holiday: "10:00 - 00:00",
-            },
-            phone: "0236 2468 1357",
-            email: "danang@cinema.com",
-            coordinates: { lat: 16.0544, lng: 108.2022 },
-          },
-          {
-            id: 4,
-            name: "Mountain Peak Cinema",
-            city: "Da Lat",
-            address: "321 Hùng Vương, Đà Lạt, Lâm Đồng",
-            description:
-              language === "vi"
-                ? "Rạp chiếu phim trên núi với view thành phố Đà Lạt, không gian ấm cúng"
-                : "Mountain cinema with Da Lat city view, cozy atmosphere",
-            screens: 6,
-            capacity: 500,
-            openingHours: {
-              weekday: "9:00 - 22:00",
-              saturday: "9:00 - 23:00",
-              sunday: "9:00 - 22:00",
-              holiday: "9:00 - 23:00",
-            },
-            phone: "0263 3698 1472",
-            email: "dalat@cinema.com",
-            coordinates: { lat: 11.9404, lng: 108.4587 },
-          },
-          {
-            id: 5,
-            name: "Harbor Cinema",
-            city: "Hai Phong",
-            address: "555 Lạch Tray, Ngô Quyền, Hải Phòng",
-            description:
-              language === "vi"
-                ? "Rạp chiếu phim cảng biển với công nghệ 3D và phòng chiếu VIP"
-                : "Harbor cinema with 3D technology and VIP screening rooms",
-            screens: 7,
-            capacity: 600,
-            openingHours: {
-              weekday: "9:30 - 22:30",
-              saturday: "9:30 - 23:30",
-              sunday: "9:30 - 22:30",
-              holiday: "9:30 - 23:30",
-            },
-            phone: "0225 2580 3691",
-            email: "haiphong@cinema.com",
-            coordinates: { lat: 20.8449, lng: 106.6881 },
-          },
-          {
-            id: 6,
-            name: "River Side Cinema",
-            city: "Can Tho",
-            address: "888 Nguyễn Văn Cừ, Ninh Kiều, Cần Thơ",
-            description:
-              language === "vi"
-                ? "Rạp chiếu phim bên sông với view cầu đi bộ và sông Hậu"
-                : "Riverside cinema with walking bridge and Hau River view",
-            screens: 5,
-            capacity: 400,
-            openingHours: {
-              weekday: "10:00 - 22:00",
-              saturday: "10:00 - 23:00",
-              sunday: "10:00 - 22:00",
-              holiday: "10:00 - 23:00",
-            },
-            phone: "0292 3819 4726",
-            email: "cantho@cinema.com",
-            coordinates: { lat: 10.0452, lng: 105.7469 },
-          },
-        ];
-
-        await new Promise((resolve) => setTimeout(resolve, 800));
-        setTheaters(mockTheaters);
-      } catch (err) {
-        console.error("Error fetching theaters:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTheaters();
-  }, [language]);
+  }, []);
+  const fetchTheaters = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/theaters/all`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setTheaters(data.theaters);
+      } else {
+        throw new Error(data.message || "Failed to fetch theaters");
+      }
+    } catch (err) {
+      console.error("Error fetching theaters:", err);
+      setError(err.message);
+      // Fallback data nếu API fail
+      setTheaters(getFallbackTheaters());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fallback data cho demo
+  const getFallbackTheaters = () => {
+    return [
+      {
+        id: "RAP00001",
+        name: "CGV Vincom Center Bà Triệu",
+        city: "Hanoi",
+        address: "191 Bà Triệu, Hai Bà Trưng, Hà Nội",
+        description:
+          "Premium cinema in city center with modern screening rooms",
+        screens: 12,
+        capacity: 1500,
+        openingHours: {
+          weekday: "8:00 - 23:00",
+          saturday: "8:00 - 00:00",
+          sunday: "8:00 - 23:00",
+          holiday: "8:00 - 00:00",
+        },
+        phone: "024 1234 5678",
+        email: "hanoi@cinema.com",
+        coordinates: { lat: 21.0285, lng: 105.8542 },
+        stats: {
+          showsToday: 15,
+          moviesShowing: 8,
+          totalSeats: 1500,
+          totalRooms: 12,
+        },
+      },
+      // ... thêm các rạp khác
+    ];
+  };
 
   // Filter theaters
   const filteredTheaters = theaters.filter((theater) => {
@@ -279,12 +123,39 @@ function TheatersPage() {
     }
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "inactive":
+        return "bg-red-100 text-red-800";
+      case "renovating":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getStatusText = (status) => {
+    return t[status] || status;
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white text-gray-800">
       <Navbar />
 
       <main className="flex-grow py-20 px-4 sm:px-6 lg:px-8 lg:py-30">
         <div className="container mx-auto px-3 sm:px-4 ">
+          {/* Header */}
+          <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+              {t.title}
+            </h1>
+            <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto">
+              {t.subtitle}
+            </p>
+          </div>
+
           {/* Filter Section */}
           <div className="mb-4 md:mb-6 bg-white rounded-lg shadow-md p-3 md:p-4">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
@@ -342,6 +213,38 @@ function TheatersPage() {
             </div>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-red-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.998-.833-2.732 0L4.346 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
+                  </svg>
+                  <span className="text-red-700 text-sm md:text-base">
+                    {t.error}
+                  </span>
+                </div>
+                <button
+                  onClick={fetchTheaters}
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  {t.retry}
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Theaters List */}
           {loading ? (
             <div className="py-8 md:py-12">
@@ -379,9 +282,20 @@ function TheatersPage() {
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4 mb-3 md:mb-4">
                       {/* Theater Info */}
                       <div className="flex-1">
-                        <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1 md:mb-2">
-                          {theater.name}
-                        </h3>
+                        <div className="flex items-start justify-between mb-1 md:mb-2">
+                          <h3 className="text-lg md:text-xl font-bold text-gray-900">
+                            {theater.name}
+                          </h3>
+                          {theater.status && (
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                                theater.status
+                              )}`}
+                            >
+                              {getStatusText(theater.status)}
+                            </span>
+                          )}
+                        </div>
 
                         {/* Address - Compact on Mobile */}
                         <div className="flex items-start text-gray-600 mb-1">
@@ -428,23 +342,43 @@ function TheatersPage() {
                         </div>
 
                         {/* Stats - Row on Mobile, Separate on Desktop */}
-                        <div className="flex gap-4 md:gap-6 mt-2 md:mt-3">
-                          <div className="flex items-center">
-                            <div className="text-sm md:text-base font-bold text-blue-600 mr-1 md:mr-2">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mt-2 md:mt-3">
+                          <div className="bg-blue-50 p-2 md:p-3 rounded-lg">
+                            <div className="text-sm md:text-base font-bold text-blue-600 text-center">
                               {theater.screens}
                             </div>
-                            <div className="text-xs md:text-sm text-gray-600">
+                            <div className="text-xs md:text-sm text-gray-600 text-center">
                               {t.screens}
                             </div>
                           </div>
-                          <div className="flex items-center">
-                            <div className="text-sm md:text-base font-bold text-gray-900 mr-1 md:mr-2">
-                              {theater.capacity}
+                          <div className="bg-gray-50 p-2 md:p-3 rounded-lg">
+                            <div className="text-sm md:text-base font-bold text-gray-900 text-center">
+                              {theater.capacity.toLocaleString()}
                             </div>
-                            <div className="text-xs md:text-sm text-gray-600">
+                            <div className="text-xs md:text-sm text-gray-600 text-center">
                               {t.seats}
                             </div>
                           </div>
+                          {theater.stats && (
+                            <>
+                              <div className="bg-green-50 p-2 md:p-3 rounded-lg">
+                                <div className="text-sm md:text-base font-bold text-green-600 text-center">
+                                  {theater.stats.showsToday || 0}
+                                </div>
+                                <div className="text-xs md:text-sm text-gray-600 text-center">
+                                  {t.showsToday}
+                                </div>
+                              </div>
+                              <div className="bg-purple-50 p-2 md:p-3 rounded-lg">
+                                <div className="text-sm md:text-base font-bold text-purple-600 text-center">
+                                  {theater.stats.moviesShowing || 0}
+                                </div>
+                                <div className="text-xs md:text-sm text-gray-600 text-center">
+                                  {t.moviesShowing}
+                                </div>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
 
@@ -516,7 +450,8 @@ function TheatersPage() {
                                   {t.mondayToFriday}:
                                 </span>
                                 <span className="font-medium text-gray-900">
-                                  {theater.openingHours.weekday}
+                                  {theater.openingHours?.weekday ||
+                                    "08:00 - 23:00"}
                                 </span>
                               </div>
                               <div className="flex justify-between">
@@ -524,7 +459,8 @@ function TheatersPage() {
                                   {t.saturday}:
                                 </span>
                                 <span className="font-medium text-gray-900">
-                                  {theater.openingHours.saturday}
+                                  {theater.openingHours?.saturday ||
+                                    "08:00 - 00:00"}
                                 </span>
                               </div>
                               <div className="flex justify-between">
@@ -532,7 +468,8 @@ function TheatersPage() {
                                   {t.sunday}:
                                 </span>
                                 <span className="font-medium text-gray-900">
-                                  {theater.openingHours.sunday}
+                                  {theater.openingHours?.sunday ||
+                                    "08:00 - 23:00"}
                                 </span>
                               </div>
                               <div className="flex justify-between">
@@ -540,7 +477,8 @@ function TheatersPage() {
                                   {t.holiday}:
                                 </span>
                                 <span className="font-medium text-gray-900">
-                                  {theater.openingHours.holiday}
+                                  {theater.openingHours?.holiday ||
+                                    "08:00 - 00:00"}
                                 </span>
                               </div>
                             </div>
@@ -570,7 +508,7 @@ function TheatersPage() {
                                   href={`tel:${theater.phone}`}
                                   className="text-blue-600 hover:text-blue-800 hover:underline"
                                 >
-                                  {theater.phone}
+                                  {theater.phone || "1800 1234"}
                                 </a>
                               </div>
                               <div className="flex items-center">

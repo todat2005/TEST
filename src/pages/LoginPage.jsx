@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar from "../components/NavBar.jsx";
-import Footer from "../components/Footer.jsx";
-import Login from "../components/LoginForm.jsx";
+import Navbar from "../components/common/NavBar.jsx";
+import Footer from "../components/common/Footer.jsx";
+import Login from "../components/common/LoginForm.jsx";
 function LoginPage() {
   return (
     <>

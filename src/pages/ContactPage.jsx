@@ -1,106 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/NavBar.jsx";
-import Footer from "../components/Footer.jsx";
-
+import Navbar from "../components/common/NavBar.jsx";
+import Footer from "../components/common/Footer.jsx";
+import translationsContactPage from "../translations/ContactPage.js";
 function Contact() {
   // Lấy ngôn ngữ từ localStorage
   const language = localStorage.getItem("language") || "en";
-
-  // Dữ liệu đa ngôn ngữ
-  const translations = {
-    en: {
-      title: "Contact Information",
-      subtitle:
-        "Reach out to us through any of these contact methods. We're always ready to help!",
-
-      phoneSupport: "Phone Support",
-      emailContact: "Email Contact",
-      officeLocation: "Office Location",
-
-      hotline: "Hotline",
-      support: "Support",
-      sales: "Sales",
-      general: "General",
-      technical: "Technical",
-      headquarters: "Headquarters",
-      city: "City",
-      country: "Country",
-
-      hours: "Mon-Fri: 8AM-6PM, Sat: 9AM-4PM",
-      response: "Response within 24 hours",
-      openHours: "Open 8:00 AM - 6:00 PM",
-
-      quickActions: "Quick Contact Actions",
-      quickSubtitle: "Choose the most convenient way to get in touch with us",
-
-      callNow: "Call Now",
-      immediateAssistance: "Immediate assistance",
-
-      emailUs: "Email Us",
-      emailSupport: "24/7 email support",
-
-      visitOffice: "Visit Office",
-      getDirections: "Get directions",
-
-      supportCenter: "Support Center",
-      faqHelp: "FAQ & Help",
-      findAnswers: "Find answers",
-
-      backHome: "Back to Homepage",
-    },
-    vi: {
-      title: "Thông Tin Liên Hệ",
-      subtitle:
-        "Liên hệ với chúng tôi qua các phương thức liên lạc này. Chúng tôi luôn sẵn sàng hỗ trợ!",
-
-      phoneSupport: "Hỗ Trợ Điện Thoại",
-      emailContact: "Liên Hệ Email",
-      officeLocation: "Địa Chỉ Văn Phòng",
-
-      hotline: "Đường dây nóng",
-      support: "Hỗ trợ",
-      sales: "Kinh doanh",
-      general: "Chung",
-      technical: "Kỹ thuật",
-      headquarters: "Trụ sở chính",
-      city: "Thành phố",
-      country: "Quốc gia",
-
-      hours: "Thứ 2 - Thứ 6: 8AM-6PM, Thứ 7: 9AM-4PM",
-      response: "Phản hồi trong vòng 24 giờ",
-      openHours: "Mở cửa 8:00 AM - 6:00 PM",
-
-      quickActions: "Hành Động Liên Hệ Nhanh",
-      quickSubtitle: "Chọn cách thuận tiện nhất để liên hệ với chúng tôi",
-
-      callNow: "Gọi Ngay",
-      immediateAssistance: "Hỗ trợ ngay lập tức",
-
-      emailUs: "Gửi Email",
-      emailSupport: "Hỗ trợ email 24/7",
-
-      visitOffice: "Thăm Văn Phòng",
-      getDirections: "Xem chỉ đường",
-
-      supportCenter: "Trung Tâm Hỗ Trợ",
-      faqHelp: "Câu hỏi thường gặp & Trợ giúp",
-      findAnswers: "Tìm câu trả lời",
-
-      backHome: "Quay về trang chủ",
-    },
-  };
-
-  const t = translations[language];
+  // Dữ liệu đa ngôn ngữ cho trang Contact
+  const googleMapAddress =
+    "https://www.google.com/maps/place/%C4%90%E1%BA%AFk+L%E1%BA%AFk,+Vi%E1%BB%87t+Nam/@12.7892072,107.5791459,217713m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3171f7daf7307157:0x8ef97694d9883315!8m2!3d12.7100116!4d108.2377519!16zL20vMDUzZDU3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D";
+  const t =
+    language === "en" ? translationsContactPage.en : translationsContactPage.vi;
 
   const contactMethods = [
     {
       title: t.phoneSupport,
       icon: "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z",
       contacts: [
-        { label: t.hotline, number: "+84 123 456 789" },
-        { label: t.support, number: "+84 987 654 321" },
-        { label: t.sales, number: "+84 555 123 456" },
+        { label: t.hotline, number: "+84 357 808 450" },
+        { label: t.support, number: "+84 357 808 450" },
+        { label: t.sales, number: "+84 357 808 450" },
       ],
       hours: t.hours,
     },
@@ -108,9 +27,9 @@ function Contact() {
       title: t.emailContact,
       icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
       contacts: [
-        { label: t.general, email: "info@ticketsystem.com" },
-        { label: t.support, email: "support@ticketsystem.com" },
-        { label: t.technical, email: "tech@ticketsystem.com" },
+        { label: t.general, email: "freefirediae@gmail.com" },
+        { label: t.support, email: "freefirediae@gmail.com" },
+        { label: t.technical, email: "freefirediae@gmail.com" },
       ],
       response: t.response,
     },
@@ -206,7 +125,7 @@ function Contact() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               <a
-                href="tel:+84123456789"
+                href={`tel:${contactMethods[0].contacts[0].number}`}
                 className="flex flex-col items-center p-6 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-200 transition-colors group"
               >
                 <div className="p-3 bg-white rounded-lg mb-4 group-hover:scale-110 transition-transform">
@@ -227,7 +146,9 @@ function Contact() {
                 <h3 className="font-semibold text-gray-800 mb-2">
                   {t.callNow}
                 </h3>
-                <p className="text-blue-600 font-medium">+84 123 456 789</p>
+                <p className="text-blue-600 font-medium text-center">
+                  {contactMethods[0].contacts[0].number}
+                </p>
                 <p className="text-sm text-gray-500 mt-2">
                   {t.immediateAssistance}
                 </p>
@@ -255,14 +176,14 @@ function Contact() {
                 <h3 className="font-semibold text-gray-800 mb-2">
                   {t.emailUs}
                 </h3>
-                <p className="text-green-600 font-medium">
-                  support@company.com
+                <p className="text-green-600 font-medium text-center">
+                  {contactMethods[1].contacts[1].email}
                 </p>
                 <p className="text-sm text-gray-500 mt-2">{t.emailSupport}</p>
               </a>
 
               <a
-                href="https://maps.google.com"
+                href={googleMapAddress}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col items-center p-6 bg-purple-50 hover:bg-purple-100 rounded-xl border border-purple-200 transition-colors group"
@@ -291,7 +212,13 @@ function Contact() {
                 <h3 className="font-semibold text-gray-800 mb-2">
                   {t.visitOffice}
                 </h3>
-                <p className="text-purple-600 font-medium">123 Business St</p>
+                <p className="text-purple-600 font-medium text-center">
+                  {contactMethods[2].contacts[0].address +
+                    ", " +
+                    contactMethods[2].contacts[1].address +
+                    ", " +
+                    contactMethods[2].contacts[2].address}
+                </p>
                 <p className="text-sm text-gray-500 mt-2">{t.getDirections}</p>
               </a>
 
@@ -317,7 +244,9 @@ function Contact() {
                 <h3 className="font-semibold text-gray-800 mb-2">
                   {t.supportCenter}
                 </h3>
-                <p className="text-orange-600 font-medium">{t.faqHelp}</p>
+                <p className="text-orange-600 font-medium text-center">
+                  {t.faqHelp}
+                </p>
                 <p className="text-sm text-gray-500 mt-2">{t.findAnswers}</p>
               </Link>
             </div>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner.jsx";
-
+import { API_URL } from "../../config/config.js";
+import translations from "../../translations/LoginForm.js";
 function Login() {
   const navigate = useNavigate();
   const [language, setLanguage] = useState("vi");
@@ -36,46 +37,7 @@ function Login() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [language]);
 
-  const translations = {
-    vi: {
-      title: "Đăng nhập vào tài khoản của bạn",
-      subtitle: "Chào mừng trở lại! Vui lòng nhập thông tin của bạn",
-      usernameLabel: "Số điện thoại hoặc Email",
-      usernamePlaceholder: "Nhập số điện thoại hoặc email của bạn",
-      passwordLabel: "Mật khẩu",
-      passwordPlaceholder: "Nhập mật khẩu của bạn",
-      rememberMe: "Ghi nhớ đăng nhập",
-      forgotPassword: "Quên mật khẩu?",
-      signIn: "Đăng nhập",
-      signingIn: "Đang đăng nhập...",
-      noAccount: "Chưa có tài khoản?",
-      signUpNow: "Đăng ký ngay",
-      errorMessages: {
-        loginFailed: "Đăng nhập thất bại",
-        serverError: "Lỗi máy chủ",
-      },
-    },
-    en: {
-      title: "Sign in to your account",
-      subtitle: "Welcome back! Please enter your details",
-      usernameLabel: "Phone Number or Email",
-      usernamePlaceholder: "Enter your phone or email",
-      passwordLabel: "Password",
-      passwordPlaceholder: "Enter your password",
-      rememberMe: "Remember me",
-      forgotPassword: "Forgot password?",
-      signIn: "Sign in",
-      signingIn: "Signing in...",
-      noAccount: "Don't have an account?",
-      signUpNow: "Sign up now",
-      errorMessages: {
-        loginFailed: "Login failed",
-        serverError: "Server error",
-      },
-    },
-  };
-
-  const t = translations[language];
+  const t = language === "vi" ? translations.vi : translations.en;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,7 +45,7 @@ function Login() {
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
