@@ -27,6 +27,7 @@ const translationsHomePage = {
     studentDiscount: "Student Discount",
     familyPackage: "Family Package",
     morningSpecial: "Morning Special",
+    clearFilters: "Clear Filters",
   },
   vi: {
     heroTitle: "Trải nghiệm điện ảnh đỉnh cao",
@@ -57,6 +58,7 @@ const translationsHomePage = {
     studentDiscount: "Giảm giá sinh viên",
     familyPackage: "Gói gia đình",
     morningSpecial: "Ưu đãi buổi sáng",
+    clearFilters: "Xóa bộ lọc",
   },
 };
 

@@ -1,25 +1,28 @@
 import React from "react";
 
 function ResultsHeader({
-  t,
-  isMobile,
-  viewType,
-  setViewType,
-  filteredMovies,
-  searchTerm,
-  selectedCategory,
-  advancedFilters,
-  categories,
-  resetAllFilters,
+  t, // Translation object chứa các chuỗi ngôn ngữ
+  isMobile, // Boolean - xác định thiết bị mobile
+  viewType, // String - loại view hiện tại: "grid" hoặc "list"
+  setViewType, // Function - hàm thay đổi viewType
+  filteredMovies, // Array - danh sách phim đã lọc
+  searchTerm, // String - từ khóa tìm kiếm
+  selectedCategory, // String - danh mục đã chọn
+  advancedFilters, // Object - chứa các bộ lọc nâng cao
+  categories, // Array - danh sách danh mục
+  resetAllFilters, // Function - hàm reset tất cả bộ lọc
 }) {
   return (
     <>
-      {/* Results Count and Filter Status */}
+      {/* ========== PHẦN 1: THỐNG KÊ KẾT QUẢ VÀ TRẠNG THÁI BỘ LỌC ========== */}
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          {/* Hiển thị số lượng kết quả và nút xóa bộ lọc */}
           <p className="text-gray-600 text-sm md:text-base">
+            {/* Số lượng phim tìm thấy */}
             <span className="font-semibold">{filteredMovies.length}</span>{" "}
             {t.resultsFound}
+            {/* Nút xóa bộ lọc - chỉ hiển thị khi có bộ lọc đang active */}
             {(searchTerm ||
               selectedCategory !== "all" ||
               advancedFilters.status !== "all" ||
@@ -33,18 +36,21 @@ function ResultsHeader({
             )}
           </p>
 
-          {/* Active filters pills - Mobile */}
+          {/* ========== PILLS HIỂN THỊ BỘ LỌC ACTIVE (CHỈ TRÊN MOBILE) ========== */}
           {isMobile &&
             (searchTerm ||
               selectedCategory !== "all" ||
               advancedFilters.status !== "all" ||
               advancedFilters.formats.length > 0) && (
               <div className="flex flex-wrap gap-2">
+                {/* Pills cho từ khóa tìm kiếm */}
                 {searchTerm && (
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
                     {t.searchPlaceholder.split("...")[0]}: {searchTerm}
                   </span>
                 )}
+
+                {/* Pills cho trạng thái phim (đang chiếu/sắp chiếu) */}
                 {advancedFilters.status !== "all" && (
                   <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">
                     {advancedFilters.status === "nowShowing"
@@ -52,11 +58,15 @@ function ResultsHeader({
                       : t.upcoming}
                   </span>
                 )}
+
+                {/* Pills cho danh mục đã chọn */}
                 {selectedCategory !== "all" && (
                   <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">
                     {categories.find((c) => c.id === selectedCategory)?.label}
                   </span>
                 )}
+
+                {/* Pills cho các định dạng phim (2D, 3D, IMAX...) */}
                 {advancedFilters.formats.map((format) => (
                   <span
                     key={format}
@@ -69,58 +79,7 @@ function ResultsHeader({
             )}
         </div>
       </div>
-
-      {/* View Type Toggle */}
-      <div className="mb-6 flex justify-end">
-        <div className="bg-white rounded-lg shadow-sm p-1 inline-flex">
-          <button
-            onClick={() => setViewType("grid")}
-            className={`px-4 py-2 rounded-md transition-colors ${
-              viewType === "grid"
-                ? "bg-blue-600 text-white"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={() => setViewType("list")}
-            className={`px-4 py-2 rounded-md transition-colors ${
-              viewType === "list"
-                ? "bg-blue-600 text-white"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
     </>
   );
 }
-
 export default ResultsHeader;

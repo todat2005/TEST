@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import MovieCard from "./MovieCard.jsx";
 import TrailerModal from "./TrailerModal.jsx";
-import extractYouTubeId from "../../../utils/extractYoutube.js";
+import extractYouTubeId from "../../../utils/ExtractYoutube.js";
 
-function MovieSection({ movies, t, type = "nowShowing" }) {
+function MovieSection({ movies, t }) {
   const language = localStorage.getItem("language") || "en";
   const [selectedTrailer, setSelectedTrailer] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isTrailerProcessing, setIsTrailerProcessing] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
   // Xử lý khi click vào nút xem trailer
@@ -16,7 +16,7 @@ function MovieSection({ movies, t, type = "nowShowing" }) {
       return;
     }
 
-    setIsLoading(true);
+    setIsTrailerProcessing(true);
     setVideoError(false);
 
     try {
@@ -31,15 +31,11 @@ function MovieSection({ movies, t, type = "nowShowing" }) {
         youtubeId: youtubeId,
       });
 
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-
-      document.body.style.overflow = "hidden";
+      setIsTrailerProcessing(false);
     } catch (error) {
       console.error("Error processing trailer:", error);
       setVideoError(true);
-      setIsLoading(false);
+      setIsTrailerProcessing(false);
     }
   };
 
@@ -47,8 +43,7 @@ function MovieSection({ movies, t, type = "nowShowing" }) {
   const handleCloseTrailer = () => {
     setSelectedTrailer(null);
     setVideoError(false);
-    setIsLoading(false);
-    document.body.style.overflow = "auto";
+    setIsTrailerProcessing(false);
   };
 
   // Xử lý retry khi có lỗi video
@@ -64,14 +59,14 @@ function MovieSection({ movies, t, type = "nowShowing" }) {
         {movies.map((movie) => {
           const hasTrailer = !!movie.trailer;
           const isTrailerLoading =
-            isLoading && selectedTrailer?.id === movie.id;
+            isTrailerProcessing && selectedTrailer?.id === movie.id;
 
           return (
             <MovieCard
               key={movie.id}
               movie={movie}
               t={t}
-              type={type}
+              type={movie.status}
               language={language}
               hasTrailer={hasTrailer}
               isTrailerLoading={isTrailerLoading}
@@ -86,7 +81,7 @@ function MovieSection({ movies, t, type = "nowShowing" }) {
         selectedTrailer={selectedTrailer}
         language={language}
         videoError={videoError}
-        isLoading={isLoading}
+        isLoading={isTrailerProcessing}
         onClose={handleCloseTrailer}
         onRetry={handleRetryTrailer}
       />

@@ -67,6 +67,7 @@ const translationsMoviePage = {
     viewAllMovies: "All Movies",
     showingNow: "Showing Now",
     upcoming: "Upcoming",
+    
   },
   vi: {
     title: "Tất cả phim",
